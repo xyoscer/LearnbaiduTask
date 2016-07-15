@@ -77,48 +77,74 @@ function renderChart() {
 }
 
 /**
- * 日、周、月的radio事件点击时的处理函数
+  radio，select变化时的处理函数
+ * 根据选择的flag，以及targetValue值来确定进行切换显示，flag=0表示是根据选择
+ 的日，周，月，进行切换，flag=1表示是根据选择的城市来进行切换。
  */
-function graTimeChange() {
-  // 确定是否选项发生了变化 
-  if (pageState.nowGraTime == this.value) {
-    return;
-  } else {
-    pageState.nowGraTime = this.value;
+ function showChange(flag,targetValue){
+  if(flag == 0){
+    if (pageState.nowGraTime !== targetValue) {  
+        pageState.nowGraTime = targetValue;
+        // 设置对应数据
+       initAqiChartData();
+       // 调用图表渲染函数
+       renderChart();
+    }
+   
   }
-  // 设置对应数据
-  initAqiChartData();
-  // 调用图表渲染函数
-  renderChart();
+  if(flag == 1){
+    if (pageState.nowSelectCity !== targetValue) {
+        pageState.nowSelectCity = targetValue;
+        // 设置对应数据
+        initAqiChartData();
+        // 调用图表渲染函数
+         renderChart();
+     } 
+  }
+    
+  
+
+ }
+  
+function graTimeChange(event) {
+  // 根据点击的获得的不同value值，进行选择执行哪个case语句
+  var event = event||window.event;
+  var target = event.target||event.srcElement; 
+  var selectValue = target.value;
+  switch(selectValue){
+    case "day":
+          showChange(flag,selectValue);
+       break;
+    case "week":
+         showChange(flag,selectValue);
+       break;
+    case "month":
+         showChange(flag,selectValue);
+       break;
+
 }
+
+  } 
 
 /**
  * select发生变化时的处理函数
  */
 function citySelectChange() {
-  // 确定是否选项发生了变化
-  if (pageState.nowSelectCity == this.value) {
-    return;
-  } else {
-    pageState.nowSelectCity = this.value;
-  }
-  // 设置对应数据
-  initAqiChartData();
-  // 调用图表渲染函数
-  renderChart();
+  // 根据flag的值来确定，怎么样执行showChange()函数
+  var city = this.value;   
+  showChange(1,city);
+ 
 }
 
 /**
- * 初始化日、周、月的radio事件，当点击时，调用函数graTimeChange
+ * 初始化日、周、月的radio事件，将该各个radio的事件委托给父元素，只绑定一次事件
+   当点击时，调用函数graTimeChange，来确定变化时的处理函数
  */
-function initGraTimeForm() {
-  var pageRadio = formGraTime.getElementsByTagName('input');
-  for (var i = 0; i < pageRadio.length; i++) {
-    addEventHandler(pageRadio[i],'click',graTimeChange);
-  }
-   
-}
+function initGraTimeForm() {  
 
+  addEventHandler(formGraTime,'click',graTimeChange);
+  
+}
 /**
  * 初始化城市Select下拉选择框中的选项
  */
