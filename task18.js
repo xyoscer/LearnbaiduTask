@@ -51,57 +51,54 @@ addEventHandler(leftChu, 'click', enqueueleftChu);
 addEventHandler(rightChu, 'click', enqueuerightChu);
  
 var queue = new Queue();
+ 
+//获得input中的值
+ 
+function getInputValue() {
+    var input = document.getElementById('num');
+    var inputValue = input.value.trim();
+    if (inputValue.match(/^[0-9]+$/)) {
+        return inputValue;
+    } else {
+        alert("请输入整数！");
+    }
+}
 //左入
  
 function enqueueleftRu() {
-    var input = document.getElementById('num');
-    var inputValue = input.value.trim();
     var text = "",
         color = "";
-    if (inputValue.match(/^[0-9]+$/)) {
-        queue.Lenqueue(inputValue);
-        var showArr = queue.print();
- 
-        for (var i = 0; i < showArr.length; i++) {
-            color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
-            text += "<div id='queueItem' style = 'background-color:" + color + "'>" + showArr[i] + "</div>";
-        }
-        queueDiv.innerHTML = "";
-        queueDiv.innerHTML += text;
- 
-    } else {
-        alert("请输入整数！")
+    var inputValue = getInputValue();
+    queue.Lenqueue(inputValue);
+    var showArr = queue.print();
+    for (var i = 0; i < showArr.length; i++) {
+        color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
+        text += "<div id='queueItem' style = 'background-color:" + color + "'>" + showArr[i] + "</div>";
     }
+    queueDiv.innerHTML = "";
+    queueDiv.innerHTML += text;
  
 }
 //右入
  
 function enqueuerightRu() {
-    var input = document.getElementById('num');
-    var inputValue = input.value.trim();
     var text = "",
         color = "";
-    if (inputValue.match(/^[0-9]+$/)) {
-        queue.Renqueue(inputValue);
-        var showArr = queue.print();
-        color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
-        queueDiv.innerHTML += "<div id='queueItem'style = 'background-color:" + color + "' >" + showArr[showArr.length -
-            1] + "</div>";
- 
-    } else {
-        alert("请输入整数！")
-    }
+    var inputValue = getInputValue();
+    queue.Renqueue(inputValue);
+    var showArr = queue.print();
+    color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
+    queueDiv.innerHTML += "<div id='queueItem'style = 'background-color:" + color + "' >" + showArr[showArr.length - 1] +
+        "</div>";
  
 }
 //左出
  
 function enqueueleftChu() {
- 
     var text = "",
         color = "";
     queue.Ldequeue();
     var showArr = queue.print();
- 
     for (var i = 0; i < showArr.length; i++) {
         color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
         text += "<div id='queueItem' style = 'background-color:" + color + "'>" + showArr[i] + "</div>";
@@ -114,12 +111,10 @@ function enqueueleftChu() {
 //右出
  
 function enqueuerightChu() {
- 
     var text = "",
         color = "";
     queue.Rdequeue();
     var showArr = queue.print();
- 
     for (var i = 0; i < showArr.length; i++) {
         color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
         text += "<div id='queueItem' style = 'background-color:" + color + "'>" + showArr[i] + "</div>";
