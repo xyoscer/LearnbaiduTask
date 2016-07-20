@@ -15,46 +15,58 @@ function addEventHandler(ele, event, hanlder) {
  
 addEventHandler(search, "click", showContent);
  
+function inputDeal(inputValue) {
+    var inputArray = [];
+    inputArray = inputValue.split(/[,，;；、\s\n]+/);
+    return inputArray;
+}
+ 
 function showContent() {
     var text = "",
-        arr1 = [],
-        arr2 = [];
-    var span = document.getElementsByTagName('span');
+        text1 = "";
     var inputValue = document.getElementById('inputValue').value.trim();
     var searchValue = document.getElementById('searchValue').value;
-    var p = inputValue.indexOf(searchValue);
-    /**
-      记录查找字符串中的第一个字符出现的位置，并根据这个位置算起，将后面的查找字符串
-      的字符也进行高亮显示，这种情况只能匹配最新一次出现的相同字符，而且查找串的长度+第一次
-      出现的字符的位置必须小于原串的长度。
-    */
-    arr1 = inputValue.split('');
-    arr2 = searchValue.split('');
-    for (var i = 0; i < arr1.length; i++) {
-        text += "<span>" + arr1[i] + "</span>";
-        show.innerHTML = text;
+    var dealValue = inputDeal(inputValue);
+    for (var i = 0; i < dealValue.length; i++) {
+ 
+        text += "<span>" + dealValue[i] + "</span>";
     }
-    for (var j = p; j < arr2.length + p; j++) {
+    show.innerHTML = text;
+    var spanNum = show.getElementsByTagName('span');
+    hightKey(searchValue, "show");
  
-        span[j].style.color = "red";
+    function hightKey(key, id) {
+        var arr = null;
+        var regStr = null;
+        var inputContent = [];
+        var Reg = null;
+        var newContent = null;
+        var spanNum = show.getElementsByTagName('span');
+        var theObj = document.getElementById(id);
+        arr = key.split(/\s+/);
+        regStr = createExp(arr);
+ 
+        for (var j = 0; j < spanNum.length; j++) {
+            inputContent[j] = spanNum[j].innerHTML;
+            Reg = new RegExp(regStr, "g");
+            //RegExp.$1用来获取模式中第一个分组对应的字符串
+            inputContent[j] = inputContent[j].replace(Reg, "<p>$1</p>");
+            text1 += "<span>" + inputContent[j] + "</span>";
+        }
+        show.innerHTML = text1;
+ 
     }
  
- 
-    //对查找的字符按照单个字符进行处理，每一个字符去与原串进行比较，相同则进行高亮显示
- 
-    /*arr1 = inputValue.split('');
-    arr2 = searchValue.split('');
-    for(var i=0;i<arr1.length;i++){  
-        text += "<span>"+arr1[i]+"</span>";        
-          show.innerHTML =text;
+    function createExp(arry) {
+        var str = "";
+        for (var i = 0; i < arry.length; i++) {
+            if (i != arry.length - 1) {
+                str = str + arry[i] + "|";//使用|将查找的多个字符串拼装起来，
+            } else {
+                str = str + arry[i];
+            }
+        }
+        return "(" + str + ")";//将处理后的查找字符串拼装到一个分组中，为后面好提取
     }
-   for(var j= 0;j<span.length;j++){
-          for(var i=0;i<arr2.length;i++){
-              if(arr2[i]==span[j].innerHTML)
-                 span[j].style.color = "red";
-          }
-       
-     }
-    */
  
 }
